@@ -6,20 +6,43 @@
 <title>chat</title>
 <style>
 body{margin:0;padding:0;background-color:transparent;overflow:hidden;}
+#danmaku-list{position:absolute;top:0;left:0;right:0;bottom:48px;overflow:hidden;}
 #info-bar{position:fixed;bottom:0;left:0;right:0;height:48px;display:flex;align-items:center;padding-left:10px;box-sizing:border-box;z-index:9999;}
 #info-bar img{width:32px;height:32px;margin-right:10px;}
-#viewer-count{color:#ffffff;font-size:24px;font-weight:bold;font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;text-shadow:-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,2px 2px 0 #000;white-space:nowrap;}
+#viewer-count{color:#fff;font-size:24px;font-weight:bold;font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;text-shadow:-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,2px 2px 0 #000;white-space:nowrap;}
 </style>
 </head>
 <body>
+<div id="danmaku-list"></div>
 <div id="info-bar">
 <img src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico" alt="icon">
 <span id="viewer-count">--</span>
 </div>
 <script src="https://blive.chat/blcsdk.js"></script>
 <script>
-class MyHandler extends blcsdk.MsgHandler{onOnlineCountUpdate(count){document.getElementById('viewer-count').innerText=count;}onAddText(){}onAddGift(){}onAddMember(){}onAddSuperChat(){}onDeleteMessage(){}onUpdateTranslation(){}}
-const handler=new MyHandler();
+class MyHandler extends blcsdk.MsgHandler{
+  onOnlineCountUpdate(count){
+    document.getElementById('viewer-count').innerText=count;
+  }
+  addMsg(msg){
+    var list=document.getElementById('danmaku-list');
+    var line=document.createElement('div');
+    line.style.cssText='color:#fff;font-size:20px;padding:2px 10px;font-family:"Noto Sans SC",sans-serif;';
+    if(msg.type==='text'){
+      line.textContent=(msg.author||'')+'：'+(msg.content||'');
+    }else if(msg.type==='gift'){
+      line.textContent=(msg.author||'')+' 送出 '+(msg.giftName||'礼物')+' x'+(msg.num||1);
+    }
+    list.appendChild(line);
+    while(list.children.length>20){list.removeChild(list.firstChild);}
+  }
+  onAddGift(){}
+  onAddMember(){}
+  onAddSuperChat(){}
+  onDeleteMessage(){}
+  onUpdateTranslation(){}
+}
+var handler=new MyHandler();
 blcsdk.init(handler);
 </script>
 </body>
