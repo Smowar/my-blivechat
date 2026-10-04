@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="referrer" content="no-referrer">
+<title>chat</title>
+<style>
+body{margin:0;padding:0;background-color:transparent;overflow:hidden;}
+#info-bar{position:fixed;bottom:0;left:0;right:0;height:48px;display:flex;align-items:center;padding-left:10px;box-sizing:border-box;z-index:9999;}
+#info-bar img{width:32px;height:32px;margin-right:10px;}
+#viewer-count{color:#ffffff;font-size:24px;font-weight:bold;font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;text-shadow:-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,2px 2px 0 #000;white-space:nowrap;}
+</style>
+</head>
+<body>
+<div id="info-bar">
+<img src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico" alt="icon">
+<span id="viewer-count">--</span>
+</div>
+<script src="https://blive.chat/blcsdk.js"></script>
+<script>
+class MyHandler extends blcsdk.MsgHandler{onOnlineCountUpdate(count){document.getElementById('viewer-count').innerText=count;}onAddText(){}onAddGift(){}onAddMember(){}onAddSuperChat(){}onDeleteMessage(){}onUpdateTranslation(){}}
+const handler=new MyHandler();
+blcsdk.init(handler);
+</script>
+</body>
+</html>
